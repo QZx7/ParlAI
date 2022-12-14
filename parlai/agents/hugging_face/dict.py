@@ -16,7 +16,7 @@ from parlai.utils.io import PathManager
 
 
 try:
-    from transformers import GPT2Tokenizer, T5TokenizerFast
+    from transformers import GPT2Tokenizer, T5TokenizerFast, T5Tokenizer
 except ImportError:
     raise ImportError(
         "Need to install Hugging Face transformers repository. "
@@ -162,7 +162,10 @@ class Gpt2DictionaryAgent(HuggingFaceDictionaryAgent):
 
             else:
                 fle_key = model_key
-        return GPT2Tokenizer.from_pretrained(fle_key)
+        if "rinna/" in fle_key:
+            return T5Tokenizer.from_pretrained(fle_key)
+        else:
+            return GPT2Tokenizer.from_pretrained(fle_key)
 
     def add_additional_special_tokens(self, additional_special_tokens: List[str]):
         """
